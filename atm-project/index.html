@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#2E6F40">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>HCKP BANK ATM</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- LOADING SCREEN -->
+    <div id="loading-screen">
+        <div class="loader"></div>
+        <h2>PLEASE WAIT...</h2>
+        <p>Processing your request</p>
+    </div>
+
+    <!-- SLIDE 1 -->
+    <section class="screen active" id="slide1">
+        <div class="atm-container">
+
+            <div class="bank-header">
+                <img class="bank-logo" src="logo.PNG" alt="HCKP Bank logo">
+                <h2 class="bank-name">HCKP BANK</h2>
+            </div>
+
+            <h1>WELCOME TO</h1>
+            <h1 class="highlight">HCKP BANK</h1>
+
+            <p>Your Trusted Banking Partner</p>
+
+            <button onclick="startATM()">
+                START TRANSACTION
+            </button>
+
+            <div class="footer">
+                Secure • Simple • Smart Banking
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SLIDE 2 -->
+    <section class="screen" id="slide2">
+        <div class="atm-container">
+
+            <div class="bank-header">
+                <img class="bank-logo" src="logo.PNG" alt="HCKP Bank logo">
+                <h2 class="bank-name">HCKP BANK</h2>
+            </div>
+
+            <h1>SELECT TRANSACTION</h1>
+            <p>Please choose your transaction type</p>
+
+            <div class="options">
+
+                <div class="option" id="deposit" role="button" tabindex="0"
+                     onclick="selectTransaction('deposit')"
+                     onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); selectTransaction('deposit'); }">
+
+                    <div class="option-icon">💰</div>
+                    <h2>DEPOSIT</h2>
+                    <p>Deposit Money</p>
+
+                </div>
+
+                <div class="option" id="withdraw" role="button" tabindex="0"
+                     onclick="selectTransaction('withdraw')"
+                     onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); selectTransaction('withdraw'); }">
+
+                    <div class="option-icon">💳</div>
+                    <h2>WITHDRAW</h2>
+                    <p>Withdraw Money</p>
+
+                </div>
+
+            </div>
+
+            <button onclick="continueTransaction()">
+                CONTINUE
+            </button>
+
+            <button class="back-button" onclick="goBack()">
+                BACK
+            </button>
+            <p class="error-message" id="transaction-error" role="alert"></p>
+
+            <div class="footer">
+                HCKP BANK • Banking Services
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SLIDE 3 -->
+    <section class="screen" id="slide3">
+        <div class="atm-container">
+            <div class="bank-header">
+                <img class="bank-logo" src="logo.PNG" alt="HCKP Bank logo">
+                <h2 class="bank-name">HCKP BANK</h2>
+            </div>
+            <h1>ENTER AMOUNT</h1>
+            <p>Transaction: <strong id="transaction-type"></strong></p>
+
+            <label class="amount-label" for="amount">Amount (INR)</label>
+            <div class="amount-display">
+                <span aria-hidden="true">₹</span>
+                <input id="amount" type="text" value="0" readonly
+                       aria-describedby="amount-error">
+            </div>
+            <p class="error-message" id="amount-error" role="alert"></p>
+
+            <div class="keypad">
+                <div class="number-pad" aria-label="Number keypad">
+                    <button class="number-key" onclick="pressDigit('1')">1</button>
+                    <button class="number-key" onclick="pressDigit('2')">2</button>
+                    <button class="number-key" onclick="pressDigit('3')">3</button>
+                    <button class="number-key" onclick="pressDigit('4')">4</button>
+                    <button class="number-key" onclick="pressDigit('5')">5</button>
+                    <button class="number-key" onclick="pressDigit('6')">6</button>
+                    <button class="number-key" onclick="pressDigit('7')">7</button>
+                    <button class="number-key" onclick="pressDigit('8')">8</button>
+                    <button class="number-key" onclick="pressDigit('9')">9</button>
+                    <span class="number-key special-key" aria-hidden="true">*</span>
+                    <button class="number-key" onclick="pressDigit('0')">0</button>
+                    <span class="number-key special-key" aria-hidden="true">#</span>
+                </div>
+                <div class="action-pad">
+                    <button class="key-action cancel-key" onclick="cancelTransaction()">
+                        <span aria-hidden="true">×</span> Cancel
+                    </button>
+                    <button class="key-action clear-key" onclick="clearAmount()">
+                        <span aria-hidden="true">←</span> Clear
+                    </button>
+                    <button class="key-action enter-key" onclick="submitAmount()">
+                        <span aria-hidden="true">↵</span> Enter
+                    </button>
+                </div>
+            </div>
+            <p class="transaction-status" id="transaction-status" role="status"></p>
+
+            <div class="footer">HCKP BANK • Demo only; no real money is transferred</div>
+        </div>
+    </section>
+
+    <!-- SLIDE 4 -->
+    <section class="screen" id="slide4">
+        <div class="atm-container">
+            <div class="bank-header">
+                <img class="bank-logo" src="logo.PNG" alt="HCKP Bank logo">
+                <h2 class="bank-name">HCKP BANK</h2>
+            </div>
+            <div class="card-visual" aria-hidden="true">💳</div>
+            <h1 id="card-title">INSERT YOUR CARD</h1>
+            <p id="card-instructions">After inserting your bank card, press Continue.</p>
+            <p class="card-summary" id="card-summary"></p>
+            <p class="privacy-note">Demo only. Do not enter or share your card details or PIN.</p>
+
+            <button id="card-continue-button" onclick="verifyCard()">CONTINUE</button>
+            <button class="back-button" onclick="showSlide(3)">BACK</button>
+
+            <div class="footer">HCKP BANK • Secure Banking Demo</div>
+        </div>
+    </section>
+
+    <!-- SLIDE 5 -->
+    <section class="screen" id="slide5">
+        <div class="atm-container">
+            <div class="bank-header">
+                <img class="bank-logo" src="logo.PNG" alt="HCKP Bank logo">
+                <h2 class="bank-name">HCKP BANK</h2>
+            </div>
+            <div class="verification-icon" aria-hidden="true">✓</div>
+            <h1>CARD VERIFIED</h1>
+            <p id="verification-summary" class="card-summary"></p>
+            <p>Your card is verified for this demo transaction.</p>
+            <p class="privacy-note">No card details or PIN are collected.</p>
+
+            <button onclick="completeTransaction()">CONTINUE</button>
+            <button class="back-button" onclick="showSlide(4)">BACK</button>
+        </div>
+    </section>
+
+    <!-- SLIDE 6 -->
+    <section class="screen success-screen" id="slide6">
+        <div class="atm-container success-container">
+            <div class="bank-header">
+                <img class="bank-logo" src="logo.PNG" alt="HCKP Bank logo">
+                <h2 class="bank-name">HCKP BANK</h2>
+            </div>
+            <h1 class="completion-heading">Your transaction has been completed.</h1>
+            <div class="completion-check" aria-hidden="true">✓</div>
+            <p id="completion-detail" class="completion-detail"></p>
+            <p class="completion-question">Do you wish to continue with a new transaction?</p>
+            <p class="privacy-note">Demo only. No real money was transferred.</p>
+            <p class="thank-you">Thank you! Visit again.</p>
+
+            <div class="completion-actions">
+                <button class="end-button" onclick="endSession()">END</button>
+                <button class="menu-button" onclick="returnToMenu()">MAIN MENU</button>
+                <button class="withdraw-button" onclick="startWithdrawal()">CASH WITHDRAWAL</button>
+            </div>
+        </div>
+    </section>
+
+    <script src="scipt.js"></script>
+</body>
+</html>

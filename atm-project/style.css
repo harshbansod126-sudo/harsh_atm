@@ -1,0 +1,624 @@
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --celadon: #A8DCAB;
+    --forest-green: #2E6F40;
+    --deep-forest: #204D2F;
+    --celadon-hover: #91CA95;
+    --body-text: #F1F8F1;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: var(--forest-green);
+    color: var(--body-text);
+    font-family: Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.screen {
+    display: none;
+    min-height: 100vh;
+    min-height: 100dvh;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+.screen.active {
+    display: flex;
+}
+
+.atm-container {
+    width: 100%;
+    max-width: none;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding:
+        max(32px, env(safe-area-inset-top, 0px))
+        max(25px, env(safe-area-inset-right, 0px))
+        max(32px, env(safe-area-inset-bottom, 0px))
+        max(25px, env(safe-area-inset-left, 0px));
+    text-align: center;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.bank-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    width: 100%;
+    margin: 0 auto 24px;
+}
+
+.bank-name {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
+    margin: 0;
+    text-align: center;
+    color: var(--celadon);
+    font-size: clamp(30px, 4.2vw, 52px);
+    font-weight: 800;
+    letter-spacing: clamp(2px, 0.65vw, 7px);
+}
+
+.bank-logo {
+    display: block;
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+    width: clamp(120px, 22vw, 220px);
+    height: auto;
+    margin: 0;
+    object-fit: contain;
+}
+
+h1 {
+    font-size: 36px;
+}
+
+.highlight {
+    color: var(--celadon);
+}
+
+p {
+    color: #E2F0E4;
+    font-size: 17px;
+}
+
+button {
+    min-height: 44px;
+    margin: 20px 8px 0;
+    padding: 17px 30px;
+    background: var(--celadon);
+    color: var(--deep-forest);
+    border: none;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.atm-container > button {
+    align-self: center;
+    width: 100%;
+    max-width: 360px;
+    min-width: 0;
+    padding: 22px 38px;
+    font-size: 24px;
+}
+
+button:focus-visible,
+.option:focus-visible,
+input:focus-visible {
+    outline: 3px solid var(--celadon);
+    outline-offset: 3px;
+}
+
+.back-button {
+    background: var(--celadon);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    button:hover {
+        background: var(--celadon-hover);
+    }
+
+    .option:hover {
+        border-color: var(--celadon);
+    }
+
+    button.number-key:hover {
+        background: var(--celadon-hover);
+    }
+
+    button.cancel-key:hover {
+        background: #B32626;
+    }
+
+    button.clear-key:hover {
+        background: #D6B62E;
+    }
+
+    button.enter-key:hover {
+        background: var(--celadon-hover);
+    }
+
+    .completion-actions button:hover {
+        background: var(--celadon-hover);
+    }
+}
+
+.options {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin: 40px 0 15px;
+}
+
+.option {
+    width: 45%;
+    padding: 30px 15px;
+    background: rgba(168,220,171,0.12);
+    border: 2px solid var(--celadon);
+    border-radius: 18px;
+    cursor: pointer;
+    transition: 0.2s;
+    touch-action: manipulation;
+}
+
+.option.selected {
+    background: rgba(168,220,171,0.24);
+    border: 3px solid var(--celadon);
+}
+
+.option-icon {
+    font-size: 55px;
+}
+
+.amount-label {
+    display: block;
+    max-width: 760px;
+    margin: 20px auto 8px;
+    color: var(--deep-forest);
+    font-size: 23px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.amount-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 760px;
+    margin: 0 auto;
+    min-height: 104px;
+    padding: 16px 28px;
+    background: white;
+    border: 3px solid var(--celadon);
+    border-radius: 10px;
+    color: var(--deep-forest);
+    font-size: clamp(38px, 5.5vw, 58px);
+    font-weight: bold;
+}
+
+.amount-display input {
+    width: 100%;
+    min-width: 0;
+    padding: 8px 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--deep-forest);
+    font: inherit;
+    text-align: right;
+}
+
+.keypad {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(160px, 2fr);
+    gap: 16px;
+    max-width: 760px;
+    margin: 18px auto 0;
+    padding: 16px;
+    border: 4px solid var(--deep-forest);
+    border-radius: 20px;
+    background: rgba(0,0,0,0.12);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+}
+
+.number-pad {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.number-key {
+    min-height: 72px;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    padding: 8px;
+    border: 3px solid #91CA95;
+    border-radius: 12px;
+    background: var(--celadon);
+    box-shadow: 0 3px 0 var(--deep-forest);
+    color: var(--deep-forest);
+    font-size: 34px;
+    font-weight: bold;
+}
+
+.special-key {
+    color: var(--celadon);
+}
+
+.action-pad {
+    display: grid;
+    grid-template-rows: repeat(3, minmax(72px, 1fr));
+    gap: 8px;
+}
+
+.key-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 0;
+    padding: 8px;
+    border: 3px solid var(--deep-forest);
+    border-radius: 12px;
+    font-size: 20px;
+}
+
+.key-action span {
+    display: grid;
+    width: 30px;
+    height: 30px;
+    place-items: center;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    font-size: 24px;
+    line-height: 1;
+}
+
+.cancel-key {
+    background: #D93636;
+    color: white;
+}
+
+.clear-key {
+    background: #F2D34F;
+    color: var(--deep-forest);
+}
+
+.enter-key {
+    background: var(--celadon);
+}
+
+.transaction-status {
+    min-height: 24px;
+    color: var(--celadon);
+    font-weight: bold;
+}
+
+.card-visual {
+    display: grid;
+    width: 110px;
+    height: 80px;
+    margin: 20px auto;
+    place-items: center;
+    border: 2px solid var(--celadon);
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--forest-green), var(--deep-forest));
+    box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+    font-size: 46px;
+}
+
+.card-summary {
+    color: var(--celadon);
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.privacy-note {
+    font-size: 14px;
+}
+
+.card-status {
+    min-height: 48px;
+    color: var(--celadon);
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.verification-icon,
+.completion-check {
+    display: grid;
+    width: 82px;
+    height: 82px;
+    margin: 18px auto;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--celadon);
+    color: var(--deep-forest);
+    font-size: 58px;
+    font-weight: bold;
+}
+
+.success-screen {
+    background: var(--forest-green);
+    color: var(--body-text);
+}
+
+.success-container {
+    max-width: none;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.completion-heading {
+    color: var(--body-text);
+    font-size: 28px;
+}
+
+.completion-check {
+    width: 90px;
+    height: 90px;
+    color: #fff;
+    font-size: 68px;
+}
+
+.completion-detail,
+.completion-question {
+    color: var(--body-text);
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.thank-you {
+    margin-top: 8px;
+    color: var(--celadon);
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.completion-actions {
+    display: grid;
+    grid-template-areas:
+        "end ."
+        "menu withdraw";
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.completion-actions button {
+    margin: 0;
+    padding: 14px 12px;
+    border-radius: 6px;
+    background: var(--celadon);
+    color: var(--deep-forest);
+    font-size: 17px;
+}
+
+.end-button {
+    grid-area: end;
+}
+
+.menu-button {
+    grid-area: menu;
+}
+
+.withdraw-button {
+    grid-area: withdraw;
+}
+
+button:disabled {
+    background: var(--celadon);
+    color: var(--deep-forest);
+    cursor: default;
+    opacity: 0.8;
+}
+
+.error-message {
+    min-height: 22px;
+    margin: 8px 0 0;
+    color: #FFD0D0;
+    font-size: 14px;
+}
+
+.option h2 {
+    color: var(--celadon);
+}
+
+.footer {
+    margin-top: 35px;
+    color: #C4E4C8;
+    font-size: 14px;
+}
+
+/* LOADING */
+
+#loading-screen {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: var(--forest-green);
+    color: var(--body-text);
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#loading-screen.show {
+    display: flex;
+}
+
+.loader {
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(168,220,171,0.25);
+    border-top: 5px solid var(--celadon);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (min-width: 501px) and (max-width: 1024px) {
+    .atm-container {
+        padding-left: clamp(32px, 6vw, 80px);
+        padding-right: clamp(32px, 6vw, 80px);
+    }
+
+    .keypad {
+        max-width: 680px;
+    }
+
+    .number-key {
+        min-height: 60px;
+    }
+
+    .action-pad {
+        grid-template-rows: repeat(3, minmax(60px, 1fr));
+    }
+}
+
+@media (min-width: 600px) and (max-height: 800px) {
+    .atm-container {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .bank-header {
+        margin-bottom: 14px;
+    }
+
+    .options {
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    .keypad {
+        margin-top: 10px;
+        padding: 8px;
+    }
+
+    .number-key {
+        min-height: 44px;
+    }
+
+    .action-pad {
+        grid-template-rows: repeat(3, minmax(44px, 1fr));
+    }
+
+    .footer {
+        margin-top: 16px;
+    }
+}
+
+@media (max-width: 500px) {
+    .options {
+        gap: 10px;
+    }
+
+    .option {
+        padding: 20px 8px;
+    }
+
+    h1 {
+        font-size: 27px;
+    }
+
+    .bank-header {
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+
+    .bank-logo {
+        width: min(64px, 20vw);
+    }
+
+    .bank-name {
+        font-size: clamp(24px, 7vw, 32px);
+        letter-spacing: 2px;
+    }
+
+    .atm-container {
+        padding: 28px 16px;
+    }
+
+    .keypad {
+        grid-template-columns: minmax(0, 3fr) minmax(105px, 2fr);
+        gap: 8px;
+        padding: 8px;
+    }
+
+    .number-pad,
+    .action-pad {
+        gap: 6px;
+    }
+
+    .number-key {
+        min-height: 56px;
+        font-size: 26px;
+    }
+
+    .action-pad {
+        grid-template-rows: repeat(3, minmax(56px, 1fr));
+    }
+
+    .key-action {
+        gap: 4px;
+        padding: 6px 4px;
+        font-size: 15px;
+    }
+
+    .key-action span {
+        width: 24px;
+        height: 24px;
+        font-size: 18px;
+    }
+
+    .amount-label,
+    .amount-display {
+        max-width: 100%;
+    }
+
+    .amount-display {
+        min-height: 88px;
+        padding: 12px 16px;
+        font-size: 36px;
+    }
+
+    .keypad {
+        grid-template-columns: minmax(0, 3fr) minmax(105px, 2fr);
+        gap: 8px;
+        padding: 8px;
+    }
+
+    .completion-actions button {
+        padding: 12px 6px;
+        font-size: 14px;
+    }
+}
